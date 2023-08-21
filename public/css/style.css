@@ -44,3 +44,7 @@ select::-ms-expand {
 select:disabled::-ms-expand {
   background: #f60;
 }
+
+h1{
+  font-size: 1.5em;
+}
