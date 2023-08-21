@@ -214,3 +214,8 @@ In this tutorial, you learned how to:
 - In a web page, display device data in a chart
 
 > Note: remember to delete any Azure resources created during this sample to avoid unnecessary charges.
+
+## 2023-08-23 Modificaciones para trabajo final del diplomado de IoT
+- Se modifica el archivo index.html para agregar mapa de Azure Maps
+- Se modifica el archivo chart-device-data.js para agregar más charts de otros sensores.
+- Se agrega Bootstrap para tener una vista más elegante.   
