@@ -9,21 +9,45 @@
     <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"" type="text/javascript" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/chart-device-data.js" type="text/javascript" charset="utf-8"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    
     <link href="css/style.css" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.css" type="text/css" />
+    <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js"></script>
 
-    <title>Temperature &amp; Humidity Real-time Data</title>
+    <title>Datos desde un Sensor IoT &amp; IoT Hub</title>
 </head>
 
 <body>
-    <h1 class="flexHeader">
+    <h1 class="">
         <span>
             <span id="deviceCount">0 devices</span>
             <select id="listOfDevices" class="select_box"></select>
         </span>
-        <span>Temperature & Humidity Real-time Data</span>
+        <span>Obtener datos desde un sensor IoT y Microsoft Azure IoT Hub</span>
     </h1>
-    <div>
-        <canvas id="iotChart"></canvas>
+  
+    <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5"> 
+
+    <div class="col">
+        <canvas id="iotVoltajes"></canvas>
+    </div>
+
+    <div class="col">
+        <canvas id="iotCorrientes"></canvas>
+    </div>
+
+    </div>
+
+    <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5">
+    <div class="col">
+        <canvas id="iotTemperatura"></canvas>
+    </div>
+
+    <div class="col">
+        <div id="myMap"></div>
+    </div>
     </div>
 </body>
 
