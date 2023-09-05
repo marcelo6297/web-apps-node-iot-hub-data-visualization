@@ -361,6 +361,84 @@ const chartOptionsCorriente = {
   }
   listOfDevices.addEventListener('change', OnSelectionChange, false);
 
+
+  class UmbralAlert {
+  
+    constructor(id) {
+
+      $("#msgAlert").hide() ;
+      $("#msgNormal").hide();
+      
+      this.potencia_trafo = 100000;
+
+      this.umbral_vac_min = 198;
+      this.umbral_vac_max = 242;
+
+      //umbrales corriente
+      this.umbral_amp_max = 0.8 * this.potencia_trafo / (220 * 1.732);
+
+    //umbral de temperatura maxima
+      this.umbral_temp_max = 35;
+      this.temp_correccion = 30;
+    
+      this.view = $("#"+id); 
+      this.data = {}
+    }
+    addData = function(data) {
+        this.data = data;
+    }
+    updateView = function() {
+      var fallas = [];
+    
+      if (this.data.voltajeData.FR > this.umbral_vac_max) {
+        fallas.push("Sobre Voltaje Fase R");
+      } else if (this.data.voltajeData.FR < this.umbral_vac_min) {
+        fallas.push("Sub Voltaje Fase R");
+      }
+    
+      if (this.data.voltajeData.FS > this.umbral_vac_max) {
+        fallas.push("Sobre Voltaje Fase S");
+      } else if (this.data.voltajeData.FS < this.umbral_vac_min) {
+        fallas.push("Sub Voltaje Fase S");
+      }
+    
+      if (this.data.voltajeData.FT > this.umbral_vac_max) {
+        fallas.push("Sobre Voltaje Fase T");
+      } else if (this.data.voltajeData.FT < this.umbral_vac_min) {
+        fallas.push("Sub Voltaje Fase T");
+      }
+    
+      if (this.data.corrienteData.FR > this.umbral_amp_max) {
+        fallas.push("Sobrecorriente en fase R");
+      }
+    
+      if (this.data.corrienteData.FS > this.umbral_amp_max) {
+        fallas.push("Sobrecorriente en fase S");
+      }
+    
+      if (this.data.corrienteData.FT > this.umbral_amp_max) {
+        fallas.push("Sobrecorriente en fase T");
+      }
+    
+      if (this.data.temperaturaData > this.umbral_temp_max) {
+        fallas.push("Temperatura Muy Alta");
+      }
+    
+      if (fallas.length > 0) {
+        $("#msgNormal").hide();
+        this.view.text(fallas.join(', '));
+        $("#msgAlert").show() ;
+      } else {
+        $("#msgAlert").hide();
+        $("#msgNormal").show();
+      }
+
+    }
+    
+  }
+
+  const umbralAlert = new UmbralAlert("alertas");
+  
   // When a web socket message arrives:
   // 1. Unpack it
   // 2. Validate it has date/time and temperature
@@ -387,6 +465,7 @@ const chartOptionsCorriente = {
           messageData.IotData.temperaturaData,
           messageData.IotData.gpsData
           );
+        umbralAlert.addData(messageData.IotData);
       } else {
         const newDeviceData = new DeviceData(messageData.DeviceId);
         trackedDevices.devices.push(newDeviceData);
@@ -404,7 +483,8 @@ const chartOptionsCorriente = {
         const nodeText = document.createTextNode(messageData.DeviceId);
         node.appendChild(nodeText);
         listOfDevices.appendChild(node);
-
+        //agregar los datos al objeto alerta
+        umbralAlert.addData(messageData.IotData);
         // if this is the first device being discovered, auto-select it
         if (needsAutoSelect) {
           needsAutoSelect = false;
@@ -421,7 +501,7 @@ const chartOptionsCorriente = {
 
       updateMapa( messageData.IotData.gpsData );
   
-
+      umbralAlert.updateView();
 
     } catch (err) {
       console.error(err);
